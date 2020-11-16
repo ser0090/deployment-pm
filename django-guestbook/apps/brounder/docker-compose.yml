@@ -1,22 +1,42 @@
-version: '2'
+version: '3.2'
 
 services:
 
   web:
     build: '.'
     image: 'brounder'
-    # TODO COMPLETE THIS
-  
+    environment:
+      DJANGO_PASSWORD: 'pass'
+      REDIS_MASTER_SERVICE_HOST: 'redis'
+      POSTGRES_SERVICE_HOST: 'postgres'
+    ports:
+       - '8000:8000'
+    command: bash -c "python manage.py migrate && gunicorn brounder.wsgi:application -w 2 -b :8000"
+    volumes:
+      - 'cachedata:/cache'
+      - 'mediadata:/media'
+    depends_on:
+      - postgres
+      - redis
+  # Postgress para la pesistencia de datos en base de datos
   postgres:
     container_name: 'postgres'
     image: 'postgres:9.5.3'
-    # TODO COMPLETE THIS
-  
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data/'
+
+  # Redis para el cache de jango 
   redis:
     container_name: 'redis'
     image: 'redis:3.2.0'
-    # TODO COMPLETE THIS
-  
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redisdata:/data'
+
+# utilizado para la pesistencia de los datos de los containers
 volumes:
   pgdata:
   redisdata:
