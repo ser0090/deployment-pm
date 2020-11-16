@@ -1,7 +1,40 @@
-version: '3.2'
+version: '3.3'
 
 services:
 
+  traefik:
+    image: "traefik:v2.3"
+    # las flags siguientes se agregan a la ejecucion del container
+    command:
+      #- "--log.level=DEBUG"
+      # se puede acceder sin https.
+      - "--api.insecure=true"
+      # los contenedores de docker se puede auto reportar.
+      - "--providers.docker=true"
+      # los contenedores no son expuestos.
+      - "--providers.docker.exposedbydefault=false"
+      # puerto de acceso a todos los aplicativos del servidor.
+      - "--entrypoints.web.address=:80"
+    ports:
+      # entrypoint
+      - "80:80"
+      # dashboard de traefik
+      - "8080:8080"
+    
+    # comparte el socket de comunicacion de docker para manjera el sistema y lo
+    # comparte con traefik. Esto es utilizado para obtener las estadisiticas de
+    # docker.
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  # este servicio idenfica al contendor que responde.
+  whoami:
+    image: "traefik/whoami"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+  
   web:
     build: '.'
     image: 'brounder'
@@ -9,15 +42,20 @@ services:
       DJANGO_PASSWORD: 'pass'
       REDIS_MASTER_SERVICE_HOST: 'redis'
       POSTGRES_SERVICE_HOST: 'postgres'
-    ports:
-       - '8000:8000'
-    command: bash -c "python manage.py migrate && gunicorn brounder.wsgi:application -w 2 -b :8000"
+    # ports:
+       # - '8000:8000'
+    command: bash -c "python manage.py migrate && gunicorn brounder.wsgi:application -w 2 -b :80"
     volumes:
       - 'cachedata:/cache'
       - 'mediadata:/media'
     depends_on:
       - postgres
       - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`web.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+ 
   # Postgress para la pesistencia de datos en base de datos
   postgres:
     container_name: 'postgres'

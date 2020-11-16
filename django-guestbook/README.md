@@ -61,6 +61,7 @@ kubernetes y el docker-compose.yml de la carpeta apps
 
 
 ## Docker Swarm
+---
 ### steps
 
 1. iniciar docker swarm
@@ -103,3 +104,17 @@ remover stack
 ```sh
 docker stack rm mystack
 ```
+
+## traefiks
+---
+
+para escalar a 4 replicas usando docker compose
+```sh
+docker-compose scale whoami=4
+```
+
+la fierecian con docker swarm es que escala por stack es decir hace multiples
+replicas de un sitema interconectado
+
+Por otro lado trafiks te permite escalar sin modificar el archivos de
+configuracion
