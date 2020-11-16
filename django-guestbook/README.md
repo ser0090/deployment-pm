@@ -59,6 +59,19 @@ La estructura base del proyecto será la siguiente:
 Su tarea será completar con el código correspondiente cada .yml de la carpeta
 kubernetes y el docker-compose.yml de la carpeta apps
 
+## Comunicacion
+---
+## Redis
+No es estrictamente un cola de mensajes, mas bien es una base de datos NoSQL,
+que tiene la particularidad de que es una base de datos en memoria.
+
+Esto permite tener una mayor velocidad de comunicacion. tanto en lectura o
+ecritura.
+
+Tiene una libreria para python `rq`
+
+> Note: para este ejemplo se utiliza redis, para calcular el cache de la
+> cantidad de visitas no solo lo trae sino lo escribre en la base de datos
 
 ## Docker Swarm
 ---
