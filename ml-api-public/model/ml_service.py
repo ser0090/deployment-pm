@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
+import json
+import time
+import redis
+from classifier import SentimentClassifier
 
+########################################################################
+KEY_TEXT = 'text'
+KEY_ID = 'id'
+CODE = 'utf-8'
 ########################################################################
 # COMPLETAR AQUI: Crear conexion a redis y asignarla a la variable "db".
 ########################################################################
-db = None
+db = redis.Redis(host='redis', port=6379, db=0)
 ########################################################################
 
 ########################################################################
@@ -11,7 +19,7 @@ db = None
 # Use classifier.SentimentClassifier de la libreria
 # spanish_sentiment_analysis ya instalada
 ########################################################################
-model = None
+model = SentimentClassifier()
 ########################################################################
 
 
@@ -37,14 +45,19 @@ def sentiment_from_score(score):
     ####################################################################
     # COMPLETAR AQUI
     ####################################################################
-    sentiment = None
-    raise NotImplementedError
+    sentiment = ''
+    if score < 0.45:
+        sentiment = 'Negativo'
+    elif score < 0.55:
+        sentiment = 'Neutral'
+    else:
+        sentiment = 'Positivo'
     ####################################################################
 
     return sentiment
 
 
-def predict(text):
+def predict(text: str):
     """
     Esta función recibe como entrada una oración y devuelve una
     predicción de su sentimiento acompañado del score de positividad.
@@ -61,8 +74,6 @@ def predict(text):
     score : float
         Porcentaje de positividad.
     """
-    sentiment = None
-    score = None
 
     ####################################################################
     # COMPLETAR AQUI: Utilice el clasificador instanciado previamente
@@ -70,7 +81,8 @@ def predict(text):
     # Luego utilice la función "sentiment_from_score" de este módulo
     # para obtener el sentimiento ("sentiment") a partir del score.
     ####################################################################
-    raise NotImplementedError
+    sentiment = model.predict(text)
+    score = sentiment_from_score(sentiment)
     ####################################################################
 
     return sentiment, score
@@ -89,11 +101,11 @@ def classify_process():
         # COMPLETAR AQUI: Obtenga un batch de trabajos encolados, use
         # lrange de Redis. Almacene los trabajos en la variable "queue".
         ##################################################################
-        queue = None
+        queue = db.lrange(name='service_queue', start=0, end=9)
         ##################################################################
 
         # Iteramos por cada trabajo obtenido
-        for q in queue:
+        for item in queue:
             ##############################################################
             # COMPLETAR AQUI:
             #     - Utilice nuestra función "predict" para procesar la
@@ -104,7 +116,14 @@ def classify_process():
             #       respuesta. Recuerde usar como "key" el "job_id".
             #
             ##############################################################
-            raise NotImplementedError
+            # item = {'text': 'hoy es un lindo dia', 'id': '2'}
+            item_raw = json.loads(item.decode(CODE))
+            job_id = item_raw[KEY_ID]
+            sentiment, score = predict(item_raw[KEY_TEXT])
+
+            response = {'prediction': sentiment, 'score': score}
+
+            db.set(name=job_id, value=json.dumps(response))
             ##############################################################
 
         ##################################################################
@@ -112,7 +131,10 @@ def classify_process():
         # procesados. Luego duerma durante unos milisengundos antes de
         # pedir por mas trabajos.
         ##################################################################
-        raise NotImplementedError
+        ##################################################################
+        db.ltrim(name='service_queue', start=len(queue), end=-1)
+
+        time.sleep(2)
         ##################################################################
 
 

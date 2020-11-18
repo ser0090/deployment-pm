@@ -1,8 +1,10 @@
-import unittest
-import os.path
 import sys
+import os.path
+import unittest
+
 sys.path.append(os.path.join(
     os.path.dirname(os.path.realpath(__file__)), os.pardir))
+
 from ml_service import predict
 
 

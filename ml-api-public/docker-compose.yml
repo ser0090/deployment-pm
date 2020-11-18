@@ -24,6 +24,8 @@ services:
 
   redis:
     image: redis:5.0.6
+    # ports:
+      # - "6379:6379"
 
   model:
     image: ml_service
