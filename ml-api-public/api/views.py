@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# puntos de entrada para comunicar a los clientes
-from middelware import model_predict
+# puntos de entrada , los endpoints para comunicar a los clientes
+from middleware import model_predict
 
 from flask import (
     Blueprint,

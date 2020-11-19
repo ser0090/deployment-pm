@@ -48,7 +48,7 @@ def model_predict(text_data):
         'text': text_data
     }
     #################################################################
-    db.rpush(name='service_queue', json.dumps(job_data))
+    db.rpush('service_queue', json.dumps(job_data))
 
     # Iterar hasta recibir el resultado
     while True:

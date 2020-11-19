@@ -142,6 +142,7 @@ def classify_process():
         ##################################################################
         ##################################################################
         # se borran los mensaje de la fifo.
+        # service_queue, es similar al topic de kafka
         db.ltrim(name='service_queue', start=len(queue), end=-1)
 
         time.sleep(2)
