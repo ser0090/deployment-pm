@@ -72,3 +72,8 @@ docker run -v $(pwd):/src -it --net=host -w /src python:3.5 bash
 pip install -r requirements.txt
 nosetests [<package_name>]
 ```
+### Test de integracion
+
+```sh
+python -m unittest tests/test_integration.py
+```
