@@ -3,8 +3,9 @@ import json
 import time
 import redis
 import settings
-from classifier import SentimentClassifier
+from pysentimiento import SentimentAnalyzer
 
+# from classifier import SentimentClassifier
 ########################################################################
 
 ########################################################################
@@ -21,11 +22,12 @@ db = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT,
 # Use classifier.SentimentClassifier de la libreria
 # spanish_sentiment_analysis ya instalada
 ########################################################################
-model = SentimentClassifier()
+# model = SentimentClassifier()
+model = SentimentAnalyzer()
 ########################################################################
 
 
-def sentiment_from_score(score):
+def sentiment_from_score(score_dict):
     """
     Esta función recibe como entrada el score de positividad
     de nuestra sentencia y dependiendo su valor devuelve uno
@@ -47,16 +49,22 @@ def sentiment_from_score(score):
     ####################################################################
     # COMPLETAR AQUI
     ####################################################################
+    score = 0.0
     sentiment = ''
-    if score < 0.45:
+
+    for key, value in score_dict.items():
+        score = value if value >= score else score
+        sentiment = key if value >= score else sentiment
+
+    if sentiment == 'NEG':
         sentiment = 'Negativo'
-    elif score < 0.55:
+    elif sentiment == 'NEU':
         sentiment = 'Neutral'
     else:
         sentiment = 'Positivo'
     ####################################################################
 
-    return sentiment
+    return sentiment, score
 
 
 def predict(text: str):
@@ -83,8 +91,8 @@ def predict(text: str):
     # Luego utilice la función "sentiment_from_score" de este módulo
     # para obtener el sentimiento ("sentiment") a partir del score.
     ####################################################################
-    sentiment = model.predict(text)
-    score = sentiment_from_score(sentiment)
+    score_dict = model.predict_probas(text)
+    sentiment, score = sentiment_from_score(score_dict)
     ####################################################################
 
     return sentiment, score
