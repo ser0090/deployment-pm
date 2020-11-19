@@ -2,16 +2,18 @@
 import json
 import time
 import redis
+import settings
 from classifier import SentimentClassifier
 
 ########################################################################
-KEY_TEXT = 'text'
-KEY_ID = 'id'
-CODE = 'utf-8'
+
 ########################################################################
 # COMPLETAR AQUI: Crear conexion a redis y asignarla a la variable "db".
 ########################################################################
-db = redis.Redis(host='redis', port=6379, db=0)
+# db=0 indice para la tabla dentro de la base de datos.
+
+db = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT,
+                 db=settings.REDIS_DB_ID)
 ########################################################################
 
 ########################################################################
@@ -96,10 +98,13 @@ def classify_process():
     función no posee atributos de entrada ni salida.
     """
     # Iteramos intentando obtener trabajos para procesar
+    # Worker que se encuentra escuchando tod el dia.
     while True:
         ##################################################################
         # COMPLETAR AQUI: Obtenga un batch de trabajos encolados, use
         # lrange de Redis. Almacene los trabajos en la variable "queue".
+        # Servidor de procesamiento obtiene 10 tareas encoladas a la base
+        # de datos
         ##################################################################
         queue = db.lrange(name='service_queue', start=0, end=9)
         ##################################################################
@@ -117,12 +122,16 @@ def classify_process():
             #
             ##############################################################
             # item = {'text': 'hoy es un lindo dia', 'id': '2'}
-            item_raw = json.loads(item.decode(CODE))
-            job_id = item_raw[KEY_ID]
-            sentiment, score = predict(item_raw[KEY_TEXT])
+            # el item se encuentra codificado, ya que el envio de bytes tiene
+            # menos carga que enviar texto plano.
+
+            item_raw = json.loads(item.decode(settings.CODE))
+            job_id = item_raw[settings.KEY_ID]
+            sentiment, score = predict(item_raw[settings.KEY_TEXT])
 
             response = {'prediction': sentiment, 'score': score}
 
+            # el job_id es el idenficador de respuesta.
             db.set(name=job_id, value=json.dumps(response))
             ##############################################################
 
@@ -132,6 +141,7 @@ def classify_process():
         # pedir por mas trabajos.
         ##################################################################
         ##################################################################
+        # se borran los mensaje de la fifo.
         db.ltrim(name='service_queue', start=len(queue), end=-1)
 
         time.sleep(2)
