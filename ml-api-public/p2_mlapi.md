@@ -102,6 +102,18 @@ compuesto de los siguientes servicios:
     width=90% 
 />
 
+Graylog
+
+<img 
+      src="./doc/lab2_res_1.png" 
+      width=90% 
+/>
+
+<img 
+      src="./doc/lab2_res_2.png" 
+      width=90% 
+/>
+
 
 Una vez realizadas las configuraciones iniciales para completar la tarea será
 necesario enviar los logs al stack instanciado y visualizar dashboards de
@@ -109,16 +121,16 @@ actividad donde se pueda ver en tiempo real las siguientes estadísticas.
 
 - *req/min* que está recibiendo nuestra API
   <img 
-      src="./doc/lab2_res_1.png" 
+      src="./doc/lab2_res_graf_1.png" 
       width=90% 
-    />
-
+  />
 - *histograma de actividad* diferenciando cuales dieron respuesta positiva y
   cuales negativa.
-    <img 
-      src="./doc/lab2_res_2.png" 
+  
+  <img 
+      src="./doc/lab2_res_graf_2.png" 
       width=90% 
-    />
+  />
 - *alerta de errores* al recibir más de 10 request con codigo de error (>=400)
   en un minuto
 
@@ -130,17 +142,38 @@ necesitan para su dashboard.
 
 ## 3. Scaling de servicios
 
-El objetivo aqui es duplicar nuestra capacidad de respuesta instanciando un "worker" más en nuestra infraestructura. Para ello deberíamos aumentar la cantidad de réplicas que tenemos del contenedor *model* y visualizar las mejoras en grafana usando nuestro cliente locust para exigir la carga. Para ello deberán utilizar el comando `docker-compose scale <SERVICE>=<#INSTANCES>`
+El objetivo aqui es duplicar nuestra capacidad de respuesta instanciando un
+"worker" más en nuestra infraestructura. Para ello deberíamos aumentar la
+cantidad de réplicas que tenemos del contenedor *model* y visualizar las mejoras
+en grafana usando nuestro cliente locust para exigir la carga. Para ello deberán
+utilizar el comando `docker-compose scale <SERVICE>=<#INSTANCES>`
 
 ## (Opcional) 4. Obtener y almacenar feedback de usuarios
-En las views de nuestro proyecto deberán completar el endpoint para feedback y permitir al usuario así acusar una respuesta incorrecta. Almacenar en un csv todos estos reportes para una futura retroalimentación.
+En las views de nuestro proyecto deberán completar el endpoint para feedback y
+permitir al usuario así acusar una respuesta incorrecta. Almacenar en un csv
+todos estos reportes para una futura retroalimentación.
 
 ## (Opcional) 5. Usar traefik como un DNS resolver y descubrir sus features
-Entre las muchas funcionalidades que traefik tiene integradas podemos encontrar un balanceador de carga con resoluciones DNS.
-El desafío propuesto es poder utilizar traefik y descubrir sus funcionalidades integrandolo en nuestro proyecto. Las tareas a realizarse son:
+Entre las muchas funcionalidades que traefik tiene integradas podemos encontrar
+un balanceador de carga con resoluciones DNS. El desafío propuesto es poder
+utilizar traefik y descubrir sus funcionalidades integrandolo en nuestro
+proyecto. Las tareas a realizarse son:
 
-- Descargar e instanciar mediante docker run la imagen [containous/whoami](https://hub.docker.com/r/containous/whoami) y entender la información que esta nos brinda. Dentro de esa información identificar el valor que nos permita conocer la IP del contenedor. Esto sera util para más adelante.
-- Levantar al menos 2 servicios (uno con nuestra API y otro sirviendo la imagen pública containous/whoami) y visualizarlos en el dashboard de traefik. Verificar también el acceso mediante el DNS http://my.own.api.localhost y http://my.own.whoami.localhost respectivamente.
-- Una vez desplegados los dos servicios, generar réplicas para nuestro servicio whoami con el comando `docker-compose scale whoami=3` y acceder a http://my.own.whoami.localhost para verificar el balanceo de carga entre los distintos contenedores notando las diferentes IP's de contenedores que reciban nuestra petición.
+- Descargar e instanciar mediante docker run la imagen
+  [containous/whoami](https://hub.docker.com/r/containous/whoami) y entender la
+  información que esta nos brinda. Dentro de esa información identificar el
+  valor que nos permita conocer la IP del contenedor. Esto sera util para más
+  adelante.
+- Levantar al menos 2 servicios (uno con nuestra API y otro sirviendo la imagen
+  pública containous/whoami) y visualizarlos en el dashboard de traefik.
+  Verificar también el acceso mediante el DNS http://my.own.api.localhost y
+  http://my.own.whoami.localhost respectivamente.
+- Una vez desplegados los dos servicios, generar réplicas para nuestro servicio
+  whoami con el comando `docker-compose scale whoami=3` y acceder a
+  http://my.own.whoami.localhost para verificar el balanceo de carga entre los
+  distintos contenedores notando las diferentes IP's de contenedores que reciban
+  nuestra petición.
 
-*AYUDA*: Aqui (https://docs.traefik.io/user-guides/docker-compose/basic-example/) encontrarán un ejemplo sencillo de uso de traefik incluso con la imagen containous/whoami.
+*AYUDA*: Aqui
+(https://docs.traefik.io/user-guides/docker-compose/basic-example/) encontrarán
+un ejemplo sencillo de uso de traefik incluso con la imagen containous/whoami.

@@ -1,12 +1,18 @@
 version: "2"
 services:
-
+  ##############################################################
+  #############          MONGO DB        #######################
+  ##############################################################
   # MongoDB: https://hub.docker.com/_/mongo/
   mongodb:
     image: mongo:3
     container_name: mongo
     volumes:
       - mongo_data:/data/db
+
+  ##############################################################
+  ################     ELASTICSEARCH     #######################
+  ##############################################################
 
   # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docker.html
   elasticsearch:
@@ -26,6 +32,10 @@ services:
         soft: -1
         hard: -1
     mem_limit: 1g
+
+  ##############################################################
+  ################       GRAYLOG         #######################
+  ##############################################################
 
   # Graylog: https://hub.docker.com/r/graylog/graylog/
   graylog:
@@ -55,7 +65,24 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
+
+  ##############################################################
+  ################       GRAFANA         #######################
+  ##############################################################
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+
 volumes:
   mongo_data:
   es_data:
   graylog_journal:
+  grafana_data:
+    driver: local
