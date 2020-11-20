@@ -45,16 +45,17 @@ Para esta tarea deberá modificar el archivo `locustfile.py` en la carpeta
       * Memoria 8 GB
   * Resultados
     El test se realiza con 200 usuarios con una tasa de crecimiento de 1 usuario
+    
     <img 
     src="./doc/loctus_test_bar.png" 
-    width=60% 
+    width=90% 
     />
     
     En general se puede responder entre 4 y 5 respuestas por segundo
     
     <img 
     src="./doc/test_01.png" 
-    width=60% 
+    width=90% 
     />
     
     Podemos observar que no se tiene errores por consulta pero si el tiempo de
@@ -65,13 +66,13 @@ Para esta tarea deberá modificar el archivo `locustfile.py` en la carpeta
     
     <img 
     src="./doc/test_02.png" 
-    width=60% 
+    width=90% 
     />
     
     
     <img 
     src="./doc/test_03.png" 
-    width=60% 
+    width=90% 
     />
 
 
