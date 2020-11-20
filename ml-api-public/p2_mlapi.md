@@ -11,19 +11,78 @@ En esta segunda iteración, vamos a continuar trabajando en nuestra API para pre
 
 ## 1. Testing de stress con *Locust*
 
-Para esta tarea deberá modificar el archivo `locustfile.py` en la carpeta `stress_test`.
+Para esta tarea deberá modificar el archivo `locustfile.py` en la carpeta
+`stress_test`.
 
-- Cree al menos un test de uso del endpoint `index` de nuestra API para evaluar su comportamiento frente a un gran número de usuarios.
+- Cree al menos un test de uso del endpoint `index` de nuestra API para evaluar
+  su comportamiento frente a un gran número de usuarios.
+  
+  ```python
+  @task(1)
+  def index(self):
+      self.client.get("/")
+  ```
+  
+- Cree al menos un test de uso del endpoint `predict` de nuestra API para
+  evaluar su comportamiento frente a un gran número de usuarios.
 
-- Cree al menos un test de uso del endpoint `predict` de nuestra API para evaluar su comportamiento frente a un gran número de usuarios.
+  ```python
+  @task(3)
+  def predict(self):
+      self.client.post("/predict", params={"text": self.POS_SENT})
+  ```
 
-- Detalle en un reporte las especificaciones de hardware del servidor donde está desplegado su servicio y compare los resultados obtenidos para diferentes números de usuarios.
+- Detalle en un reporte las especificaciones de hardware del servidor donde está
+  desplegado su servicio y compare los resultados obtenidos para diferentes
+  números de usuarios.
+  
+  * Espeficaciones 
+    Loctus funciona en un contenedor de docker su declaracion se encuentra en
+    [docker-compose](./docker-compose.yml). Las espeficicaciones de la maquina
+    donde corre todo el sistema es:
+  
+      * Procesador Intel(R) Core(TM) i7-7500U, 4 threads
+      * Memoria 8 GB
+  * Resultados
+    El test se realiza con 200 usuarios con una tasa de crecimiento de 1 usuario
+    <img 
+    src="./doc/loctus_test_bar.png" 
+    width=60% 
+    />
+    
+    En general se puede responder entre 4 y 5 respuestas por segundo
+    
+    <img 
+    src="./doc/test_01.png" 
+    width=60% 
+    />
+    
+    Podemos observar que no se tiene errores por consulta pero si el tiempo de
+    respuesta es muy alto. 
+    
+    Esto se debe al cuello de botella del middleware, ya que se espera que modelo
+    termine de procesar para dar una respuesta.
+    
+    <img 
+    src="./doc/test_02.png" 
+    width=60% 
+    />
+    
+    
+    <img 
+    src="./doc/test_03.png" 
+    width=60% 
+    />
 
-- (Opcional) Reemplace el actual procesamiento de datos secuencial en `ml_service.py` por procesamiento en batches. ¿Nota alguna mejora?
+
+- (Opcional) Reemplace el actual procesamiento de datos secuencial en
+  `ml_service.py` por procesamiento en batches. ¿Nota alguna mejora?
 
 ## 2. Monitoreo con *EKL*
 
-Si bien la propuesta es ElasticSearch Kibana y Logstash para mejor entendimiento usaremos tecnologías similares. En este punto se deberá instanciar un stack compuesto de los siguientes servicios:
+Si bien la propuesta es ElasticSearch Kibana y Logstash para mejor entendimiento
+usaremos tecnologías similares. En este punto se deberá instanciar un stack
+compuesto de los siguientes servicios:
   - *mongodb*: Para dar soporte de base de datos a graylog en la gestión de usuarios y configuraciones
   - *elasticsearch*: Para el almacenamiento persistente de los datos a ser procesados. En este caso serán logs de salida de los contenedores.
   - *graylog*: Responsable de la gestión de elasticsearch. Creará nuestros indices rotativos con persistencia configurable y además nos permitirá hacer preproceso en la ingestión de datos. Su driver de ingestión de datos nos permitirá conectar la salida de los contenedores de manera nativa.

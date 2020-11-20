@@ -35,3 +35,17 @@ services:
     command: "python3 /src/ml_service.py"
     depends_on:
       - redis
+
+  locust:
+    image: locustio/locust
+    container_name: locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./stress_test:/mnt/locust
+    command: "-f /mnt/locust/locustfile.py"
+    # command: "-f /mnt/locust/locustfile.py --master -H http://locust:8089"
+    depends_on:
+      - api
+
+
