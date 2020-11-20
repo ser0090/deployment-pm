@@ -83,8 +83,8 @@ def predict(text: str):
     # Luego utilice la función "sentiment_from_score" de este módulo
     # para obtener el sentimiento ("sentiment") a partir del score.
     ####################################################################
-    sentiment = model.predict(text)
-    score = sentiment_from_score(sentiment)
+    score = model.predict(text)
+    sentiment = sentiment_from_score(score)
     ####################################################################
 
     return sentiment, score

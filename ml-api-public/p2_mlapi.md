@@ -1,7 +1,9 @@
 # Despliegue de sistemas predictivos - Práctico 2
 > Diplodatos 2019
 
-En esta segunda iteración, vamos a continuar trabajando en nuestra API para predicción de sentimientos en oraciones, profundizando e implementando lo siguiente:
+En esta segunda iteración, vamos a continuar trabajando en nuestra API para
+predicción de sentimientos en oraciones, profundizando e implementando lo
+siguiente:
 
 1. Testing de stress con *Locust*
 2. Monitoreo con *EKL*
@@ -84,18 +86,38 @@ Para esta tarea deberá modificar el archivo `locustfile.py` en la carpeta
 Si bien la propuesta es ElasticSearch Kibana y Logstash para mejor entendimiento
 usaremos tecnologías similares. En este punto se deberá instanciar un stack
 compuesto de los siguientes servicios:
-  - *mongodb*: Para dar soporte de base de datos a graylog en la gestión de usuarios y configuraciones
-  - *elasticsearch*: Para el almacenamiento persistente de los datos a ser procesados. En este caso serán logs de salida de los contenedores.
-  - *graylog*: Responsable de la gestión de elasticsearch. Creará nuestros indices rotativos con persistencia configurable y además nos permitirá hacer preproceso en la ingestión de datos. Su driver de ingestión de datos nos permitirá conectar la salida de los contenedores de manera nativa.
-  - *grafana*: Herramienta que utilizaremos para la creación de dashboards para visualización. Elegida por su versatilidad y fácil entendimiento.
+  - *mongodb*: Para dar soporte de base de datos a graylog en la gestión de
+    usuarios y configuraciones
+  - *elasticsearch*: Para el almacenamiento persistente de los datos a ser
+    procesados. En este caso serán logs de salida de los contenedores.
+  - *graylog*: Responsable de la gestión de elasticsearch. Creará nuestros
+    indices rotativos con persistencia configurable y además nos permitirá hacer
+    preproceso en la ingestión de datos. Su driver de ingestión de datos nos
+    permitirá conectar la salida de los contenedores de manera nativa.
+  - *grafana*: Herramienta que utilizaremos para la creación de dashboards para
+    visualización. Elegida por su versatilidad y fácil entendimiento.
 
-Una vez realizadas las configuraciones iniciales para completar la tarea será necesario enviar los logs al stack instanciado y visualizar dashboards de actividad donde se pueda ver en tiempo real las siguientes estadísticas.
+<img 
+    src="./doc/lab_2.png" 
+    width=90% 
+/>
+
+
+Una vez realizadas las configuraciones iniciales para completar la tarea será
+necesario enviar los logs al stack instanciado y visualizar dashboards de
+actividad donde se pueda ver en tiempo real las siguientes estadísticas.
 
 - *req/min* que está recibiendo nuestra API
-- *histograma de actividad* diferenciando cuales dieron respuesta positiva y cuales negativa.
-- *alerta de errores* al recibir más de 10 request con codigo de error (>=400) en un minuto
+- *histograma de actividad* diferenciando cuales dieron respuesta positiva y
+  cuales negativa.
+- *alerta de errores* al recibir más de 10 request con codigo de error (>=400)
+  en un minuto
 
-*AYUDA*: Aqui (https://docs.graylog.org/en/3.1/pages/installation/docker.html) encontrarán la informacion al respecto de como levantar el stack propuesto. Los pasos para la configuración inicial serán explicados en el teórico. Ademas deberán agregar los prints necesarios para poder ingestar los datos minimos que necesitan para su dashboard.
+*AYUDA*: Aqui (https://docs.graylog.org/en/3.1/pages/installation/docker.html)
+encontrarán la informacion al respecto de como levantar el stack propuesto. Los
+pasos para la configuración inicial serán explicados en el teórico. Ademas
+deberán agregar los prints necesarios para poder ingestar los datos minimos que
+necesitan para su dashboard.
 
 ## 3. Scaling de servicios
 
