@@ -108,8 +108,17 @@ necesario enviar los logs al stack instanciado y visualizar dashboards de
 actividad donde se pueda ver en tiempo real las siguientes estadísticas.
 
 - *req/min* que está recibiendo nuestra API
+  <img 
+      src="./doc/lab2_res_1.png" 
+      width=90% 
+    />
+
 - *histograma de actividad* diferenciando cuales dieron respuesta positiva y
   cuales negativa.
+    <img 
+      src="./doc/lab2_res_2.png" 
+      width=90% 
+    />
 - *alerta de errores* al recibir más de 10 request con codigo de error (>=400)
   en un minuto
 
