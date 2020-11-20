@@ -70,7 +70,15 @@ def model_predict(text_data):
             db.delete(job_id)
             break
 
-        time.sleep(1)
+        time.sleep(0.5)
         #################################################################
+    # end while
+    print(
+        json.dumps({
+            "text": text_data,
+            "prediction": prediction,
+            "score": score
+            })
+    )
 
     return prediction, score
