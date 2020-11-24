@@ -134,6 +134,17 @@ actividad donde se pueda ver en tiempo real las siguientes estadísticas.
 - *alerta de errores* al recibir más de 10 request con codigo de error (>=400)
   en un minuto
   
+  Agregando el siguiente comando para imprimir los codigos de respuesta
+  
+  ```yml
+  api:
+    image: flask_api
+    container_name: ml_api
+    build:
+      context: ./api
+    command: gunicorn --workers=8 --bind 0.0.0.0:5000 --access-logformat "{\"response_code\":%(s)s}"  --log-level=debug --access-logfile - app:app
+  ```
+  
   Creacion de Query
 
    <img 
