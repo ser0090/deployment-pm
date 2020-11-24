@@ -180,9 +180,16 @@ cantidad de réplicas que tenemos del contenedor *model* y visualizar las mejora
 en grafana usando nuestro cliente locust para exigir la carga. Para ello deberán
 utilizar el comando `docker-compose scale <SERVICE>=<#INSTANCES>`
 
-#### Resultados worker = 1
+#### Especificaciones de la Maquina
+ * Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
+ * 8 Threads
+ * 16 GB RAM
 
-Locust
+Las pruebas fueron usando locust 200 usuarios con una tasa de crecimiento de 1
+
+### Resultados worker = 1
+
+#### Locust
 
 <img 
       src="./doc/replica_01_locust.png" 
@@ -190,7 +197,7 @@ Locust
   /> 
 
 
-Grafana
+#### Grafana
 
 <img 
       src="./doc/replica_01_grafana.png" 
@@ -198,15 +205,34 @@ Grafana
   /> 
 
 
-#### Rsultados worker = 2
+### Rsultados worker = 2
 
 Comando utilizado
 
 ```sh
 docker-compose -f docker-compose.yml up --scale model=2
 ```
+#### Locust
 
+<img 
+      src="./doc/replica_02_locust.png" 
+      width=90% 
+  /> 
 
+Se puede apreciar que aumentando el modelo a 2 workers se tiene un mayor numero
+de respuestas por segundo. Aumentando el desemepeño del sistema.
+
+#### Grafana
+
+<img 
+      src="./doc/replica_02_grafana.png" 
+      width=90% 
+  /> 
+
+Tambien se observa las mejoras usando grafana. Hay que tener en consideracion
+que las mejoras se pueden observar si se dispone de recursos (ejm RAM) ya que
+inicialemnte el escalamiento fue probado en un PC con 8 GB. Y el rendimiento en
+lugar de mejorar, eran peores (las respuestas por segundo oscilaban en un 1.3).
 
 
 ## (Opcional) 4. Obtener y almacenar feedback de usuarios
