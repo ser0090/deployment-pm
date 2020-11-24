@@ -180,6 +180,35 @@ cantidad de réplicas que tenemos del contenedor *model* y visualizar las mejora
 en grafana usando nuestro cliente locust para exigir la carga. Para ello deberán
 utilizar el comando `docker-compose scale <SERVICE>=<#INSTANCES>`
 
+#### Resultados worker = 1
+
+Locust
+
+<img 
+      src="./doc/replica_01_locust.png" 
+      width=90% 
+  /> 
+
+
+Grafana
+
+<img 
+      src="./doc/replica_01_grafana.png" 
+      width=90% 
+  /> 
+
+
+#### Rsultados worker = 2
+
+Comando utilizado
+
+```sh
+docker-compose -f docker-compose.yml up --scale model=2
+```
+
+
+
+
 ## (Opcional) 4. Obtener y almacenar feedback de usuarios
 En las views de nuestro proyecto deberán completar el endpoint para feedback y
 permitir al usuario así acusar una respuesta incorrecta. Almacenar en un csv
