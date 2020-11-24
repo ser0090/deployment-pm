@@ -133,7 +133,28 @@ actividad donde se pueda ver en tiempo real las siguientes estadísticas.
   />
 - *alerta de errores* al recibir más de 10 request con codigo de error (>=400)
   en un minuto
+  
+  Creacion de Query
 
+   <img 
+      src="./doc/alarm_02.png" 
+      width=90% 
+  /> 
+  
+  Creacion de alarma
+  
+     <img 
+      src="./doc/alarm_03.png" 
+      width=90% 
+  /> 
+  
+  Resultados
+  
+     <img 
+      src="./doc/alarm_01.png" 
+      width=90% 
+  /> 
+  
 *AYUDA*: Aqui (https://docs.graylog.org/en/3.1/pages/installation/docker.html)
 encontrarán la informacion al respecto de como levantar el stack propuesto. Los
 pasos para la configuración inicial serán explicados en el teórico. Ademas
